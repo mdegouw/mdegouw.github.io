@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* @nuxtjs/color-mode is configured with `classSuffix: ''`, so it toggles a
+   `.dark` / `.light` class on <html>. Tailwind v4 needs to be told that. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ---- Surfaces (dark is the default palette) ---------------------------- */
+  --color-ground:      #08090a;  /* page background */
+  --color-surface:     #101214;  /* cards, raised panels */
+  --color-surface-alt: #171a1d;  /* hover / nested panels */
+  --color-line:        #24282c;  /* hairline borders */
+  --color-line-strong: #333940;  /* hovered/focused borders */
+
+  /* ---- Text ------------------------------------------------------------- */
+  --color-ink:         #e8eaed;  /* primary text */
+  --color-ink-muted:   #9aa2aa;  /* secondary text, body copy */
+  --color-ink-subtle:  #5f676e;  /* metadata, disabled, large text only */
+
+  /* ---- Accent ----------------------------------------------------------- */
+  --color-accent:      #3ddc84;  /* terminal green — actions, links, status */
+  --color-accent-dim:  #2aa563;  /* hover/pressed */
+  --color-accent-wash: #3ddc841a; /* 10% tint for backgrounds */
+
+  /* ---- Status ----------------------------------------------------------- */
+  --color-positive:    #3ddc84;
+  --color-warning:     #e3b341;
+  --color-critical:    #f2555a;
+
+  /* ---- Typography ------------------------------------------------------- */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Fluid display sizes: readable on mobile, commanding on desktop. */
+  --text-display:   clamp(2.5rem, 6vw, 4.5rem);
+  --text-headline:  clamp(1.75rem, 3.5vw, 2.5rem);
+  --text-title:     clamp(1.125rem, 1.6vw, 1.375rem);
+  --text-label:     0.75rem;   /* mono, uppercase, tracked */
+
+  /* ---- Rhythm ----------------------------------------------------------- */
+  --spacing-section: clamp(4rem, 10vh, 8rem);  /* vertical padding per section */
+  --container-content: 72rem;                   /* max readable width */
+
+  /* ---- Form ------------------------------------------------------------- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+
+  /* The two infinite animations. Everything else moves once, or not at all. */
+  --animate-status-pulse: status-pulse 2s ease-in-out infinite;
+  --animate-cursor-blink: cursor-blink 1s step-end infinite;
+
+  @keyframes status-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+}
+
+/* Light mode inverts surfaces and darkens the accent for contrast. */
+:root.light {
+  --color-ground:      #fbfbfa;
+  --color-surface:     #ffffff;
+  --color-surface-alt: #f2f3f4;
+  --color-line:        #e2e4e6;
+  --color-line-strong: #cdd1d5;
+  --color-ink:         #14171a;
+  --color-ink-muted:   #4d555c;
+  --color-ink-subtle:  #7b838a;
+  --color-accent:      #10883f;  /* darker: 4.5:1 on white */
+  --color-accent-dim:  #0b6a30;
+  --color-accent-wash: #10883f1a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Anchor targets must clear the sticky header. */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Scroll reveal. The prerendered HTML carries no `data-reveal` attribute at
+   all, so content is visible with JS disabled or before hydration; UiReveal
+   only adds "hidden" once it is mounted and able to remove it again. */
+[data-reveal] {
+  transition:
+    opacity var(--duration-base) var(--ease-out-soft),
+    transform var(--duration-base) var(--ease-out-soft);
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

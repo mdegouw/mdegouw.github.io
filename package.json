@@ -1,0 +1,54 @@
+{
+  "name": "mdegouw-portfolio",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "npx serve .output/public",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --cache --cache-location .eslintcache",
+    "lint:fix": "eslint . --fix --cache --cache-location .eslintcache",
+    "typecheck": "nuxt typecheck",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report tests/.playwright/report",
+    "verify": "npm run lint && npm run typecheck && npm run test:unit"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/icon": "^2.5.1",
+    "@nuxt/image": "^2.1.0",
+    "@nuxtjs/color-mode": "^4.0.1",
+    "@nuxtjs/robots": "^6.2.0",
+    "@nuxtjs/sitemap": "^8.5.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vueuse/nuxt": "^14.4.0",
+    "nuxt": "^4.5.2",
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.42",
+    "vue-router": "^5.3.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.2.0",
+    "@playwright/test": "^1.62.1",
+    "@vue/test-utils": "^2.5.0",
+    "eslint": "^10.9.1",
+    "happy-dom": "^20.12.0",
+    "playwright-core": "^1.62.1",
+    "serve": "^14.2.6",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11",
+    "vue-tsc": "^3.3.11"
+  },
+  "description": "Personal portfolio of Mathijs de Gouw — Nuxt SSG, deployed to GitHub Pages.",
+  "engines": {
+    "node": ">=24.0.0 <25.0.0 || >=26.0.0"
+  }
+}
