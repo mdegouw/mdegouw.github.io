@@ -91,6 +91,7 @@ app/                          # Nuxt srcDir — all application code
 public/                       # served verbatim at the domain root
   CNAME                       # custom domain (mdegouw.nl) — must stay here
   images/                     # source images for <NuxtImg>
+  tux.txt                     # ASCII art stamped into every page (see §9)
 tests/
   e2e/                        # Playwright specs (*.spec.ts)
   unit/                       # Vitest specs (*.spec.ts)
@@ -345,6 +346,16 @@ Known follow-ups:
   for elements still below the fold.
 - **`IntersectionObserver` `rootMargin` takes px or %, never rem.** A rem there
   throws at hydration and replaces the whole page with the 500 error.
+- **Vue strips template comments from the production build.** A `<!-- -->`
+  written in a `.vue` file is gone by `nuxt generate`. The view-source easter
+  egg (Tux, from `public/tux.txt`) is therefore injected straight after the
+  doctype by a Nitro plugin, registered by the inline module in
+  `nuxt.config.ts` and written to `.nuxt/tux-plugin.mjs` by `addTemplate`. It
+  hooks `render:response`, which is a *runtime* hook, so the same code path
+  serves `nuxt dev` and every page `nuxt generate` prerenders. This is the one
+  Nitro plugin in the project and it still ships no production server — it only
+  shapes bytes on their way to disk. Guarded by a test in
+  `tests/e2e/smoke.spec.ts`.
 - **The mobile nav is a native `<dialog>`** opened with `showModal()`, which is
   where its focus trap, Escape handling and focus restoration come from. It
   lives inside `<header>`, so selectors like `header nav a` match it too —

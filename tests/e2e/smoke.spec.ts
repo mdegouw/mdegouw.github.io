@@ -63,3 +63,17 @@ test.describe('static build contract', () => {
     expect(await sitemap.text()).toContain('<urlset')
   })
 })
+
+test.describe('easter egg', () => {
+  test('every generated page carries Tux in a source comment', async ({ request }) => {
+    // Injected by the Nitro plugin registered in `nuxt.config.ts`. It is the
+    // only thing that puts an HTML comment in the output, so a silent Nitro
+    // hook rename would otherwise go unnoticed.
+    for (const path of ['/', '/definitely-not-a-real-route']) {
+      const html = await (await request.get(path)).text()
+      expect(html, `Tux missing from ${path}`).toContain('https://asciiart.website/art/2098')
+      // It has to be the first thing a reader sees, not buried at the bottom.
+      expect(html.indexOf('<!--'), `Tux not at the top of ${path}`).toBeLessThan(200)
+    }
+  })
+})

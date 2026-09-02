@@ -1,8 +1,35 @@
+import { readFileSync } from 'node:fs'
+import { addServerPlugin, addTemplate } from '@nuxt/kit'
 import tailwindcss from '@tailwindcss/vite'
 
 // Single source of truth for the deployed origin. Consumed by @nuxtjs/sitemap,
 // @nuxtjs/robots and canonical/OG tags. Override locally via NUXT_SITE_URL.
 const siteUrl = process.env.NUXT_SITE_URL ?? 'https://mdegouw.nl'
+
+// For whoever opens view-source. Injected by the Nitro plugin below rather than
+// written into a `.vue` file, because Vue strips template comments from the
+// production build — a `<!-- -->` in a template never reaches the output.
+const tuxBanner = `\n<!--\n${readFileSync(new URL('public/tux.txt', import.meta.url), 'utf8').trimEnd()}\n\nTux, from Christopher Johnson's ASCII art collection.\nhttps://asciiart.website/art/2098\n-->`
+
+// `render:response` is a *runtime* hook, so it fires in `nuxt dev` as well as
+// for every page prerendered by `nuxt generate` — one code path, both modes.
+// Written into `.nuxt/` by the inline module below, so the whole easter egg
+// stays in this file instead of earning the repo a top-level `server/`
+// directory for six lines.
+const tuxPlugin = `
+// A Nitro plugin is just a function of the app instance; the banner is inlined
+// here because this module is bundled separately from nuxt.config.
+const DOCTYPE = '<!DOCTYPE html>'
+const BANNER = ${JSON.stringify(tuxBanner)}
+
+export default (nitroApp) => {
+  nitroApp.hooks.hook('render:response', (response) => {
+    if (typeof response.body !== 'string' || !response.body.startsWith(DOCTYPE)) return
+
+    response.body = response.body.replace(DOCTYPE, DOCTYPE + BANNER)
+  })
+}
+`
 
 export default defineNuxtConfig({
   modules: [
@@ -14,6 +41,10 @@ export default defineNuxtConfig({
     '@nuxtjs/robots',
     '@nuxtjs/sitemap',
     '@vueuse/nuxt',
+
+    // Registers the view-source easter egg as a Nitro plugin. Inline because it
+    // is six lines and has no options worth a module file.
+    () => addServerPlugin(addTemplate({ filename: 'tux-plugin.mjs', getContents: () => tuxPlugin, write: true }).dst),
   ],
 
   // Static-only site: no server runtime exists in production, so `useFetch` to
