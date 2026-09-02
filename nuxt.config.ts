@@ -9,7 +9,7 @@ const siteUrl = process.env.NUXT_SITE_URL ?? 'https://mdegouw.nl'
 // For whoever opens view-source. Injected by the Nitro plugin below rather than
 // written into a `.vue` file, because Vue strips template comments from the
 // production build — a `<!-- -->` in a template never reaches the output.
-const tuxBanner = `\n<!--\n${readFileSync(new URL('public/tux.txt', import.meta.url), 'utf8').trimEnd()}\n\nTux, from Christopher Johnson's ASCII art collection.\nhttps://asciiart.website/art/2098\n\nHe dances in the DevTools element inspector. window.tux.stop() to let him rest.\n-->`
+const tuxBanner = `\n<!--\n${readFileSync(new URL('public/tux.txt', import.meta.url), 'utf8').trimEnd()}\n\nTux, from Christopher Johnson's ASCII art collection.\nhttps://asciiart.website/art/2098\n\nLook at him wiggle. Execute window.tux.stop() to let him rest.\n-->`
 
 // `render:response` is a *runtime* hook, so it fires in `nuxt dev` as well as
 // for every page prerendered by `nuxt generate` — one code path, both modes.
