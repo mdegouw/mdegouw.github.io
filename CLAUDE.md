@@ -78,7 +78,8 @@ do not introduce pnpm/yarn/bun.
 
 ```
 app/                          # Nuxt srcDir — all application code
-  app.vue                     # root component (layout + page outlet only)
+  app.vue                     # root component (layout + page outlet, plus the
+                              #   document-scoped `useTuxDance` easter egg)
   assets/css/main.css         # Tailwind entry + design tokens
   components/
     layout/                   # site chrome, one instance each: TheHeader, TheFooter, TheNav
@@ -356,6 +357,16 @@ Known follow-ups:
   Nitro plugin in the project and it still ships no production server — it only
   shapes bytes on their way to disk. Guarded by a test in
   `tests/e2e/smoke.spec.ts`.
+- **The penguin dances in the inspector, not in view-source.** `view-source:`
+  re-renders the bytes as fetched and never runs script, so a comment can not
+  animate there. The DevTools element inspector shows the live comment *node*,
+  and `useTuxDance` (called from `app.vue`, the only document-scoped component)
+  rewrites its text on an interval. It shears the frames out of the art already
+  in the document rather than shipping a second copy, holds still for
+  `prefers-reduced-motion` and hidden tabs, and exposes `window.tux` —
+  advertised inside the comment so the hint reaches its reader without logging
+  to everyone else's console. Editing the banner's blank-line structure in
+  `nuxt.config.ts` will break the art/credits split.
 - **The mobile nav is a native `<dialog>`** opened with `showModal()`, which is
   where its focus trap, Escape handling and focus restoration come from. It
   lives inside `<header>`, so selectors like `header nav a` match it too —

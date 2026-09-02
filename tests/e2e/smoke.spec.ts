@@ -76,4 +76,30 @@ test.describe('easter egg', () => {
       expect(html.indexOf('<!--'), `Tux not at the top of ${path}`).toBeLessThan(200)
     }
   })
+
+  test('the penguin sways once the page is hydrated', async ({ page }) => {
+    await page.goto('/')
+
+    // The comment is a child of the document, above `<html>` — `useTuxDance`
+    // rewrites this node, which is what the element inspector shows.
+    const banner = () => page.evaluate(() =>
+      Array.from(document.childNodes)
+        .find((node): node is Comment =>
+          node instanceof Comment && node.data.includes('asciiart.website'))
+        ?.data ?? '',
+    )
+
+    const firstFrame = await banner()
+    expect(firstFrame).not.toBe('')
+    await expect.poll(banner, { message: 'Tux never moved' }).not.toBe(firstFrame)
+
+    // Only the art is allowed to move; the attribution has to stay readable.
+    expect(await banner()).toContain('https://asciiart.website/art/2098')
+
+    // The comment promises this handle works, so it is part of the contract.
+    await page.evaluate(() => window.tux?.stop())
+    const resting = await banner()
+    await page.waitForTimeout(500)
+    expect(await banner(), 'stop() did not stop the dance').toBe(resting)
+  })
 })
