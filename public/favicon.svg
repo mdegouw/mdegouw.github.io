@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Mathijs de Gouw">
+  <!-- The hero's terminal prompt reduced to its two glyphs: the `>` caret and
+       the `▋` block cursor. Deliberately dark in both colour schemes — the tile
+       is a mark, not UI, and the site is dark-first. -->
+  <rect width="32" height="32" rx="7" fill="#08090a"/>
+  <path d="M9 10.6 14.4 16 9 21.4" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="18.2" y="9.4" width="4.6" height="13.2" rx=".6" fill="#3ddc84"/>
+</svg>

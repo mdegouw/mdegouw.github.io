@@ -493,6 +493,12 @@ Rules:
   shift) and `loading="lazy"` below the fold. Source files in `public/images/`.
 - The design needs almost no imagery: at most one portrait in About. Resist
   adding decorative images — empty space is the aesthetic.
+- The favicon is the hero's terminal prompt reduced to two glyphs: the `>` caret
+  and the `▋` block cursor, accent on ground, in a 22%-radius tile.
+  `public/favicon.svg` is the source of truth — `favicon.ico` (16/32/48) and
+  `apple-touch-icon.png` (180×180, square, opaque, since iOS masks it itself)
+  are rasterised from the same geometry. The tile stays dark in light mode: it
+  is a mark, not UI.
 - **Required before launch:** `public/images/og-default.png` at 1200×630. Links
   to the site currently preview blank. Match the site's look — dark ground, mono
   wordmark, accent rule.

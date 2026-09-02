@@ -39,7 +39,13 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'en' },
       titleTemplate: '%s · Mathijs de Gouw',
-      link: [{ rel: 'icon', href: '/favicon.ico', sizes: 'any' }],
+      // SVG first for browsers that take it; the .ico carries 16/32/48 for the
+      // rest, and `sizes: 'any'` stops Chrome preferring it over the SVG.
+      link: [
+        { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'theme-color', content: '#0a0a0a' },
